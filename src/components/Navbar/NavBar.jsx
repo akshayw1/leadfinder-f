@@ -1,240 +1,213 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import getUserInfo from '../../utils/getUserInfo';
-import { NavLinks } from '../../utils/NavLinks';
-import logo from "../../assets/croplogo.png"
+"use client"
 
-const NavBar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const info = getUserInfo();
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
+import getUserInfo from '../../utils/getUserInfo'
+import { NavLinks } from '../../utils/NavLinks'
+import { Menu, X, User, LogOut, LogIn, UserPlus } from 'lucide-react'
+// import {logo} from 
+
+export default function NavBar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const info = getUserInfo()
 
   const handleSignout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('persist:root');
-  };
+    localStorage.removeItem('token')
+    localStorage.removeItem('persist:root')
+  }
+
+  const menuVariants = {
+    closed: { opacity: 0, y: "-100%" },
+    open: { opacity: 1, y: 0 }
+  }
+
   return (
-    <>
-      <div className="bg-gray-900 z-[100000] ">
-        <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8">
-          <div className="relative flex items-center justify-between">
-            <div className="flex items-center">
-              <Link to="/" className="inline-flex items-center mr-8">
-              <img
-                        className="w-10 h-10"
-                        src={logo}
-                        alt=""
-                      />
-                <span className="ml-2 text-xl font-bold tracking-wide text-gray-100 uppercase">
-                  Exel leads
-                </span>
-              </Link>
-              <ul className=" items-center hidden  space-x-8 lg:flex">
+    <nav className="bg-gradient-to-r from-gray-900 to-gray-800 sticky top-0 z-50 border-b border-cyan-500/30 shadow-lg shadow-cyan-500/20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            {/* <Link to="/" className="flex-shrink-0">
+              // <motion.div
+              //   whileHover={{ scale: 1.1 }}
+              //   className="h-10 w-10 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-md shadow-cyan-500/30"
+              // >
+                
+              // </motion.div>
+            </Link> */}
+<div className="flex items-center">
+            <Link to="/">
+            <img src="/logoo.png" alt="Logo" className="w-18 h-[100px] mr-2" />
+            </Link>
+            
+</div>     
+        
+               <div className="hidden md:block ml-10">
+              <div className="flex items-baseline space-x-4">
                 {NavLinks.map((link) => (
-                  <li key={link.label}>
+                  <motion.div key={link.label} whileHover={{ scale: 1.05 }}>
                     <Link
                       to={link.path}
-                      className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
+                      className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:bg-cyan-600/20 hover:shadow-md hover:shadow-cyan-500/20"
                     >
                       {link.label}
                     </Link>
-                  </li>
+                  </motion.div>
                 ))}
-                <li>
-                  {info && info.data && (
+                {info && info.data && (
+                  <motion.div whileHover={{ scale: 1.05 }}>
                     <Link
                       to="/dashboard"
-                      className="font-medium tracking-wide text-gray-100 transition-colors duration-200 hover:text-teal-accent-400"
+                      className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:bg-cyan-600/20 hover:shadow-md hover:shadow-cyan-500/20"
                     >
                       Dashboard
                     </Link>
-                  )}
-                </li>
-              </ul>
+                  </motion.div>
+                )}
+              </div>
             </div>
-            <ul className="flex items-center space-x-8 lg:flex">
+          </div>
+          <div className="hidden md:block">
+            <div className="ml-4 flex items-center align-center md:ml-6">
               {info && info.data ? (
                 <>
-                  <li className='hidden md:inline-block '>
-                    <Link to="/profile">
-                      <div className='bg-deep-purple-accent-400 rounded-full w-10 h-10 flex justify-center align-middle overflow-hidden'>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth={1.5} stroke="" className="w-12 h-12">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-</svg>
-</div>
+                <div className='m-4 flex items-center	somee'>
+                  <motion.div whileHover={{ scale: 1.4 }}>
+                    <Link to="/profile" className="mr-4">
+                      <div className='bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full w-10 h-10 flex justify-center items-center overflow-hidden shadow-md shadow-cyan-500/30'>
+                        <User className="w-6 h-6 text-white" />
+                      </div>
                     </Link>
-                  </li>
-                  <li className='hidden md:inline-block '>
+                  </motion.div>
+                  </div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link to="/auth/login">
                       <button
-                        className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
                         onClick={handleSignout}
+                        className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md shadow-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/40 flex items-center"
                       >
+                        <LogOut className="w-4 h-4 mr-2" />
                         Sign out
                       </button>
                     </Link>
-                  </li>
+                  </motion.div>
                 </>
               ) : (
                 <>
-                  <li  className='hidden md:inline-block '>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link
-                      to={'/auth/login'}
-                      className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                      to="/auth/login"
+                      className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium mr-2 transition-all duration-300 shadow-md shadow-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/40 flex items-center"
                     >
+                      <LogIn className="w-4 h-4 mr-2" />
                       Sign in
                     </Link>
-                  </li>
-                  <li className='hidden md:inline-block '>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Link
-                      to={'/auth/signup'}
-                      className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
+                      to="/auth/signup"
+                      className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-300 shadow-md shadow-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/40 flex items-center"
                     >
+                      <UserPlus className="w-4 h-4 mr-2" />
                       Sign up
                     </Link>
-                  </li>
+                  </motion.div>
                 </>
-              )}
-            </ul>
-            {/* Mobile menu */}
-            <div className="lg:hidden">
-              <button
-                aria-label="Open Menu"
-                title="Open Menu"
-                className="p-2 -mr-1 transition duration-200 rounded focus:outline-none focus:shadow-outline"
-                onClick={() => setIsMenuOpen(true)}
-              >
-                <svg className="w-5 text-gray-600" viewBox="0 0 24 24">
-                  <path
-                    fill="currentColor"
-                    d="M23,13H1c-0.6,0-1-0.4-1-1s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,13,23,13z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M23,6H1C0.4,6,0,5.6,0,5s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,6,23,6z"
-                  />
-                  <path
-                    fill="currentColor"
-                    d="M23,20H1c-0.6,0-1-0.4-1-1s0.4-1,1-1h22c0.6,0,1,0.4,1,1S23.6,20,23,20z"
-                  />
-                </svg>
-              </button>
-              {isMenuOpen && (
-                <div className="  absolute top-0 left-0 w-full z-[100000]">
-                  <div className="p-5 bg-white border rounded shadow-sm">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <Link to="/" className="inline-flex items-center">
-                          <svg
-                            className="w-8 text-deep-purple-accent-400"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            fill="none"
-                          >
-                            <rect x="3" y="1" width="7" height="12"></rect>
-                            <rect x="3" y="17" width="7" height="6"></rect>
-                            <rect x="14" y="1" width="7" height="6"></rect>
-                            <rect x="14" y="11" width="7" height="12"></rect>
-                          </svg>
-                          <span className="ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase">
-                            Exelleads
-                          </span>
-                        </Link>
-                      </div>
-                      <div>
-                        <button
-                          aria-label="Close Menu"
-                          title="Close Menu"
-                          className="p-2 -mt-2 -mr-2 transition duration-200 rounded hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          <svg
-                            className="w-5 text-gray-600"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              fill="currentColor"
-                              d="M19.7,4.3c-0.4-0.4-1-0.4-1.4,0L12,10.6L5.7,4.3c-0.4-0.4-1-0.4-1.4,0s-0.4,1,0,1.4l6.3,6.3l-6.3,6.3 c-0.4,0.4-0.4,1,0,1.4C4.5,19.9,4.7,20,5,20s0.5-0.1,0.7-0.3l6.3-6.3l6.3,6.3c0.2,0.2,0.5,0.3,0.7,0.3s0.5-0.1,0.7-0.3 c0.4-0.4,0.4-1,0-1.4L13.4,12l6.3-6.3C20.1,5.3,20.1,4.7,19.7,4.3z"
-                            ></path>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <nav>
-                      <ul className="space-y-4">
-                        {NavLinks.map((link) => (
-                          <li key={link.label}>
-                            <Link
-                              to={link.path}
-                              className="font-medium tracking-wide text-gray-700 transition-colors duration-200 hover:text-deep-purple-accent-400"
-                            >
-                              {link.label}
-                            </Link>
-                          </li>
-                        ))}
-
-                        {info && info.data ? (
-                          <>
-                          <li>
-                          <Link
-                      to="/dashboard"
-                      className="font-medium tracking-wide text-black-100 transition-colors duration-200 hover:text-teal-accent-400"
-                    >
-                      Dashboard
-                    </Link>
-                    </li>
-                          <li className='hidden md:inline-block '>
-                          <Link to="/profile">
-                            <div className='bg-deep-purple-accent-400 rounded-full w-10 h-10 flex justify-center align-middle overflow-hidden'>
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" strokeWidth={1.5} stroke="" className="w-12 h-12">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-      </svg>
-      </div>
-                          </Link>
-                        </li>
-                          <li>
-                            <Link to="/auth/login">
-                              <button
-                                className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                                onClick={handleSignout}
-                              >
-                                Sign out
-                              </button>
-                            </Link>
-                          </li>
-                          </>
-                        ) : (
-                          <>
-                            <li>
-                              <Link
-                                to="/auth/login"
-                                className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                              >
-                                Sign in
-                              </Link>
-                            </li>
-
-                            <li>
-                              <Link
-                                to="/auth/signup"
-                                className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-                              >
-                                Sign up
-                              </Link>
-                            </li>
-                          </>
-                        )}
-                      </ul>
-                    </nav>
-                  </div>
-                </div>
               )}
             </div>
           </div>
+          <div className="-mr-2 flex md:hidden">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 inline-flex items-center justify-center p-2 rounded-md text-white hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white transition-all duration-300 shadow-md shadow-cyan-500/20 hover:shadow-lg hover:shadow-cyan-500/30"
+            >
+              <span className="sr-only">Open main menu</span>
+              {isMenuOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
+            </motion.button>
+          </div>
         </div>
       </div>
-    </>
-  );
-};
 
-export default NavBar;
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            className="md:hidden"
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-gradient-to-b from-gray-800 to-gray-900 shadow-lg shadow-cyan-500/20">
+              {NavLinks.map((link) => (
+                <Link
+                  key={link.label}
+                  to={link.path}
+                  className="text-gray-300 hover:bg-cyan-600/20 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 hover:shadow-md hover:shadow-cyan-500/20"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              {info && info.data && (
+                <Link
+                  to="/dashboard"
+                  className="text-gray-300 hover:bg-cyan-600/20 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 hover:shadow-md hover:shadow-cyan-500/20"
+                >
+                  Dashboard
+                </Link>
+              )}
+            </div>
+            <div className="pt-4 pb-3 border-t border-gray-700 bg-gradient-to-b from-gray-800 to-gray-900 shadow-lg shadow-cyan-500/20">
+              {info && info.data ? (
+                <div className="flex items-center px-5">
+                  <div className="flex-shrink-0">
+                    <div className='bg-gradient-to-br from-cyan-400 to-blue-500 rounded-full w-10 h-10 flex justify-center items-center overflow-hidden shadow-md shadow-cyan-500/30'>
+                      <User className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div className="ml-3">
+                    <div className="text-base font-medium leading-none text-white">{info.data.name}</div>
+                    <div className="text-sm font-medium leading-none text-gray-400">{info.data.email}</div>
+                  </div>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="ml-auto">
+                    <Link to="/auth/login">
+                      <button
+                        onClick={handleSignout}
+                        className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-all duration-300 shadow-md shadow-cyan-500/30 hover:shadow-lg hover:shadow-cyan-500/40 flex items-center"
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign out
+                      </button>
+                    </Link>
+                  </motion.div>
+                </div>
+              ) : (
+                <div className="mt-3 px-2 space-y-1">
+                  <Link
+                    to="/auth/login"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-cyan-600/20 transition-all duration-300 hover:shadow-md hover:shadow-cyan-500/20 flex items-center"
+                  >
+                    <LogIn className="w-4 h-4 mr-2" />
+                    Sign in
+                  </Link>
+                  <Link
+                    to="/auth/signup"
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-cyan-600/20 transition-all duration-300 hover:shadow-md hover:shadow-cyan-500/20 flex items-center"
+                  >
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Sign up
+                  </Link>
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </nav>
+  )
+}

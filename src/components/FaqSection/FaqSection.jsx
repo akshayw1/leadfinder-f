@@ -25,7 +25,7 @@ const FaqSection = ({ faq, index, toggleFAQ }) => {
           Services Offered:
           </h3>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-          We, Exel Leads, specialize in providing lead generation services online, assisting businesses
+          We, Boomnify, specialize in providing lead generation services online, assisting businesses
 in finding unlimited leads to grow their ventures. Our services includes leads generation through online with our
 specific searches from different sources
           </p>

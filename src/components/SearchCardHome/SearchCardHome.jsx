@@ -1,232 +1,170 @@
 import React, { useState } from 'react';
-import { Card, Checkbox, Label, TextInput } from 'flowbite-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { showErrorMessage, showSuccessMessage } from '../../utils/toast';
 import { searchSchema } from '../../validations/inputValidation';
 import { freesearch } from '../../redux/reducers/searchSlice';
-import Button from '../Button';
 import TableComp from '../TableComp/TableComp';
-import { fetchStatistics } from '../../redux/reducers/statisticsSlice';
-import Modal from 'react-modal';
-import getUserInfo from '../../utils/getUserInfo';
-import ModalSubcribe from '../ModalSubcribe/ModalSubcribe';
-import ModalOnSearch from '../ModalOnSearch/ModalOnSearch';
-import { Link } from 'react-router-dom';
-
-
 
 const SearchCardHome = () => {
-  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [isSearchOpen,setIsSearchOpen] = useState(false);
-
-  const openErrorModal = (message) => {
-    setErrorMessage(message);
-    setErrorModalIsOpen(true);
-  };
-
-  const closeErrorModal = () => {
-    setErrorModalIsOpen(false);
-    setErrorMessage('');
-  };
-
-  const [searchResults, setSearchResults] = useState();
-  console.log(searchResults);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState(null);
   const { isLoading } = useSelector((state) => state.search);
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({ resolver: yupResolver(searchSchema) });
 
+  const exampleSearches = [
+    { position: 'Web Designer', city: 'New York' },
+    { position: 'Software Engineer', city: 'San Francisco' },
+    { position: 'Marketing Specialist', city: 'Chicago' },
+    { position: 'Data Analyst', city: 'Boston' },
+    { position: 'UX Researcher', city: 'Seattle' },
+  ];
 
- 
   const onSubmit = async (searchData) => {
     try {
-      console.log(searchData);
       setIsSearchOpen(true);
-
-      setTimeout(()=>{
-        setIsSearchOpen(false);
-      },5000)
-
       setSearchResults(null);
-    
+
       const response = await dispatch(freesearch(searchData)).unwrap();
-     
       
       setSearchResults(response.data);
     } catch (error) {
-      // if (error.response && error.response.status === 403) {
-      //     alert('Plan exceeded, purchase a plan.');
-      //   } else {
-
-        
-      //     openErrorModal('An error occurred while fetching data.');
-      //   }
-
-        console.log(error);
-      
+      console.error(error);
+    } finally {
+      setIsSearchOpen(false);
+      // setTimeout(() => { 
+      // }, 1000);
     }
   };
 
   return (
-    <>
-       <Modal
-  isOpen={isSearchOpen}
-  onRequestClose={closeErrorModal}
-  contentLabel="Error Modal"
-  style={{
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    content: {
-      width: '60%', // Adjust the width as needed
-      height: 'fit-content', // Adjust the height as needed
-      margin: 'auto',
-    },
-  }}
->
-  <div className='text-2xl flex text-center justify-center'>
-    
-   We are finding for leads for you, Please Wait for 2-3 Minutes depending on your leads count,
-   Thanks for using Exelleads!!!🚀
-  </div>
- 
-  
- 
-</Modal>
-   <Modal
-  isOpen={errorModalIsOpen}
-  onRequestClose={closeErrorModal}
-  contentLabel="Error Modal"
-  style={{
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
-    content: {
-      width: '60%', // Adjust the width as needed
-      height: 'fit-content', // Adjust the height as needed
-      margin: 'auto',
-    },
-  }}
->
-  <div>
-    <ModalSubcribe/>
-  </div>
- 
-  
-  <button onClick={closeErrorModal}
-            
-            type="button"
-            className="flex absolute top-0 right-0 justify-center items-center w-7 h-7 text-sm font-semibold rounded-lg border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:border-transparent dark:hover:bg-gray-700 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-            data-hs-overlay="#hs-cookies"
-          >
-            <span className="sr-only">Close</span>
-            <svg
-              className="flex-shrink-0 w-4 h-4"
-              xmlns="http://www.w3.org/2000/svg"
-              width={24}
-              height={24}
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-</Modal>
-
-      
-      <Card className="w-full mt-2">
-        <form
-          className="flex flex-row w-full gap-4"
-          onSubmit={(event) => {
-            handleSubmit(onSubmit)(event);
-          }}
-        >
-          <div className='w-1/2'>
-            <div className="mb-2  block">
-              <Label htmlFor="position" value="Enter Position" />
-            </div>
-            <TextInput
-            className='w-full'
+    <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+          <div className="flex-1">
+            <label htmlFor="position" className="block text-sm font-medium text-gray-700 mb-1">
+              Position or Keyword
+            </label>
+            <input
+              type="text"
               id="position"
-              type="position"
-              placeholder="Website Designer"
-              required
               {...register('position')}
+              placeholder="e.g., Web Designer"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {errors.position && <p className="mt-1 text-sm text-red-600">{errors.position.message}</p>}
           </div>
-          <div className='w-[30%]'>
-            <div className="mb-2 block">
-              <Label htmlFor="city" value="Enter the City" />
-            </div>
-            <TextInput
+          <div className="flex-1">
+            <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+              City
+            </label>
+            <input
+              type="text"
               id="city"
-              type="city"
-              placeholder="Delhi"
-              required
               {...register('city')}
+              placeholder="e.g., New York"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
+            {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>}
           </div>
-          
+        </div>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+        >
           {isLoading ? (
             <>
-            <div className='mb-2 block'>
-              <Button type="submit" label="" className="" disabled={true}>
-                Finding Please Wait...
-                <svg
-                  role="status"
-                  className="inline mr-3 w-4 h-4 text-white animate-spin"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                    fill="#E5E7EB"
-                  />
-                  <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </Button>
-              </div>
+              <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              Finding Please Wait...
             </>
           ) : (
-            <div className='mt-6 lock'>
-            <Button
-              type="submit"
-              label="search"
-              className="cursor-pointer bg-deep-purple-accent-700 rounded py-2 px-8 text-center text-lg font-bold  text-white"
-            />
-            </div>
+            'Search'
           )}
+        </button>
+        
+      </form>
 
-          {/* <Button type="submit">Search</Button> */}
-        </form>
-      </Card>
-      <div className="">
-        <div className="text-white ">
-          <TableComp tableData={searchResults} Dhidden={true} Blurred={true}  />
-          <Link
-                to="/auth/signup"
-                className="inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-              >
-                Sign Up and Get amazing quality leads!!!!
-              </Link>
+      {isSearchOpen && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" id="search-modal">
+          <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div className="mt-3 text-center">
+              <h3 className="text-lg leading-6 font-medium text-gray-900">Searching</h3>
+              <div className="mt-2 px-7 py-3">
+                <p className="text-sm text-gray-500">
+                  We are finding leads for you. Please wait for 2-3 minutes depending on your leads count.
+                  Thanks for using Boomnify!!!🚀
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+          {!searchResults &&
+      <div className="bg-gray-100 p-4 rounded-lg">
+        <h3 className="text-lg font-medium text-gray-900 mb-2">Example Searches:</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">City</th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {exampleSearches.map((search, index) => (
+                <tr key={index}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{search.position}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{search.city}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <button 
+                      className="text-indigo-600 hover:text-indigo-900"
+                      onClick={() => {
+                        setValue('position', search.position);
+                        setValue('city', search.city);
+                      }}
+                    >
+                      Use
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
         </div>
       </div>
-    </>
+          }
+
+      {searchResults && (
+  <div className="mt-6">
+    <h3 className="text-lg font-medium text-white mb-4">
+      Found {searchResults.length} result{searchResults.length !== 1 && 's'}:
+    </h3>
+    <TableComp tableData={searchResults} Dhidden={true} Blurred={true} />
+  </div>
+)}
+
+      <div className="text-center">
+        <a href="/howtosearch" className="inline-flex items-center text-sm text-gray-600 hover:text-indigo-600">
+          Learn how to search effectively
+          <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </div>
   );
 };
 

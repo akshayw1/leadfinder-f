@@ -7,7 +7,7 @@ const PrivacyPolicy = () => {
          <div class="max-w-xl mt-10 mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12 ">
    
     <h2 class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
-      <span class="relative inline-block">
+      {/* <span class="relative inline-block">
         <svg viewBox="0 0 52 24" fill="currentColor" class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
           <defs>
             <pattern id="7b568941-9ed0-4f49-85a0-5e21ca6c7ad6" x="0" y="0" width=".135" height=".30">
@@ -17,19 +17,19 @@ const PrivacyPolicy = () => {
           <rect fill="url(#7b568941-9ed0-4f49-85a0-5e21ca6c7ad6)" width="52" height="24"></rect>
         </svg>
        
-      </span>
+      </span> */}
      Privacy Policy
     </h2>
    
   </div>
   <div className='flex justify-center mb-5'>
-  <div className='w-4/5 flex text-center justify-center '>
+  <div className='w-[70%] flex text-center justify-center '>
         Privacy Policy 
-At Exelleads , accessible at Exelleads.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Exelleads Name and how we use it.
+At Boomnify , accessible at Boomnify.com, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Boomnify Name and how we use it.
 
-If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through support at Support@Exelleads.com
+If you have additional questions or require more information about our Privacy Policy, do not hesitate to contact us through support at Support@Boomnify.com
 
-This privacy policy applies only to our online activities and is valid for visitors to our exelleads with regards to the information that they shared and/or collect in Exelleads Name. This policy is not applicable to any information collected offline or via channels other than this exelleads.
+This privacy policy applies only to our online activities and is valid for visitors to our exelleads with regards to the information that they shared and/or collect in Boomnify Name. This policy is not applicable to any information collected offline or via channels other than this exelleads.
 
 Consent
 
@@ -56,10 +56,10 @@ Send you supports
 Find and prevent fraud
 Log Files
 
-Exelleads Name follows a standard procedure of using log files. These files log visitors when they visit exelleadss. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the exelleads, and gathering demographic information.
+Boomnify Name follows a standard procedure of using log files. These files log visitors when they visit exelleadss. All hosting companies do this and a part of hosting services' analytics. The information collected by log files include internet protocol (IP) addresses, browser type, Internet Service Provider (ISP), date and time stamp, referring/exit pages, and possibly the number of clicks. These are not linked to any information that is personally identifiable. The purpose of the information is for analyzing trends, administering the site, tracking users' movement on the exelleads, and gathering demographic information.
 
 Cookies and Web Beacons
-Like any other exelleads, Exelleads Name uses ‘cookies'. These cookies are used to store information including visitors' preferences, and the pages on the exelleads that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
+Like any other exelleads, Boomnify Name uses ‘cookies'. These cookies are used to store information including visitors' preferences, and the pages on the exelleads that the visitor accessed or visited. The information is used to optimize the users' experience by customizing our web page content based on visitors' browser type and/or other information.
 
 DoubleClick DART Cookie
 Google is one of a third-party vendor on our site. It also uses cookies, known as DART cookies, to serve ads to our site visitors based upon their visit to www.exelleads.com and other sites on the internet. However, visitors may choose to decline the use of DART cookies by visiting the Google ad and content network Privacy Policy at the following URL – https://policies.google.com/technologies/ads.
@@ -72,15 +72,15 @@ https://policies.google.com/technologies/ads
 
 Advertising Partners Privacy Policies
 
-You may consult this list to find the Privacy Policy for each of the advertising partners of Exelleads Name.
+You may consult this list to find the Privacy Policy for each of the advertising partners of Boomnify Name.
 
-Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Exelleads Name, which are sent directly to users' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on exelleadss that you visit.
+Third-party ad servers or ad networks uses technologies like cookies, JavaScript, or Web Beacons that are used in their respective advertisements and links that appear on Boomnify Name, which are sent directly to users' browser. They automatically receive your IP address when this occurs. These technologies are used to measure the effectiveness of their advertising campaigns and/or to personalize the advertising content that you see on exelleadss that you visit.
 
-Note that Exelleads Name has no access to or control over these cookies that are used by third-party advertisers.
+Note that Boomnify Name has no access to or control over these cookies that are used by third-party advertisers.
 
 Third-Party Privacy Policies
 
-Exelleads Name's Privacy Policy does not apply to other advertisers or exelleadss. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. You may find a complete list of these Privacy Policies and their links here: Privacy Policy Links.
+Boomnify Name's Privacy Policy does not apply to other advertisers or exelleadss. Thus, we are advising you to consult the respective Privacy Policies of these third-party ad servers for more detailed information. It may include their practices and instructions about how to opt-out of certain options. You may find a complete list of these Privacy Policies and their links here: Privacy Policy Links.
 
 You can choose to disable cookies through your individual browser options. To know more detailed information about cookie management with specific web browsers, it can be found at the browsers' respective exelleadss. What Are Cookies?
 
@@ -118,7 +118,7 @@ Children's Information
 
 Another part of our priority is adding protection for children while using the internet. We encourage parents and guardians to observe, participate in, and/or monitor and guide their online activity.
 
-Exelleads Name does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our exelleads, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
+Boomnify Name does not knowingly collect any Personal Identifiable Information from children under the age of 13. If you think that your child provided this kind of information on our exelleads, we strongly encourage you to contact us immediately and we will do our best efforts to promptly remove such information from our records.
   </div> </div> 
   
   <Footer/>

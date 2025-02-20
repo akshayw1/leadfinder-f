@@ -10,7 +10,7 @@ import croplogo from '../src/assets/croplogo.png'
 
 const MainWrapper = ({ children }) => (
   <Provider store={store}>
-   <FloatingWhatsApp phoneNumber='+1 9093488855' accountName= 'Exel leads' avatar={croplogo}/>
+   <FloatingWhatsApp phoneNumber='+1 9093488855' accountName= 'Boomnify' avatar={croplogo}/>
 
     <PersistGate loading={null} persistor={persistor}>
       {children}

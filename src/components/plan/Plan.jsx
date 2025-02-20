@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from '../../redux/app/customAxios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { formatTitle } from '../../utils/format';
 import getUserInfo from '../../utils/getUserInfo';
 import { createPaymentsSession } from '../../redux/reducers/PaymentsSlice';
@@ -12,6 +12,8 @@ const Plan = () => {
   const info = getUserInfo();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const { data, isLoading } = useSelector((state) => state.payment);
   const [plans, setPlans] = useState();
   const [loadingStates, setLoadingStates] = useState({});
@@ -36,7 +38,11 @@ const Plan = () => {
   const createCheckoutSession = (plan) => {
     if (!info) {
       showErrorMessage('Please login to subscribe');
-      navigate('/auth/login');
+      navigate('/auth/login', { 
+        state: { 
+          from: location.pathname,
+          planId: plan._id // Optionally store the selected plan ID
+        }})
       return;
     }
     setLoadingStates((prev) => ({ ...prev, [plan._id]: true }));
@@ -46,7 +52,7 @@ const Plan = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6 text-center mt-5">
+      <h1 className="text-2xl text-white font-bold mb-6 text-center mt-5">
         Subscribe to access the leads features
       </h1>
       <div className="flex flex-wrap gap-4 justify-center">

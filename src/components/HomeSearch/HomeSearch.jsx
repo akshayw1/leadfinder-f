@@ -35,7 +35,7 @@ const HomeSearch = () => {
           </svg>
           <span className="relative"></span>
         </span>
-        Search and See How the Exelleads Works
+        Search and See How the Boomnify Works
       </h2>
     
     

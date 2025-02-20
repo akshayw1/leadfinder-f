@@ -1,99 +1,74 @@
+"use client"
+
 import React from 'react'
+import { motion } from 'framer-motion'
+import { Search, MapPin, CheckCircle, Zap } from 'lucide-react'
 
 const FeaturePage = () => {
+  const features = [
+    { icon: Search, title: "Search For Leads", description: "Enter the key word like- Dentists, Digital Marketing, Golf Courses based on your business target" },
+    { icon: MapPin, title: "See City Location and Enter", description: "Enter the City- Delhi, Mumbai, and any other location" },
+    { icon: CheckCircle, title: "Results and Delivery", description: "No. of leads- number of leads you need. That's it, enjoy the leads and grow. You should search for at most 100 leads only before" },
+    { icon: Zap, title: "Enjoy Leads", description: "Take the leads and grow your business" }
+  ]
+
   return (
-    <div><div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
-    <div className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
-      <div>
-        <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
-          Exelleads
-        </p>
-      </div>
-      <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
-        <span className="relative inline-block">
-          <svg
-            viewBox="0 0 52 24"
-            fill="currentColor"
-            className="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block"
+    <div className="bg-gradient-to-b from-gray-900 to-gray-800 min-h-screen text-white">
+      <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12"
+        >
+          <div>
+            <p className="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-cyan-400 uppercase rounded-full bg-cyan-900">
+              Boomnify
+            </p>
+          </div>
+          <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-white sm:text-4xl md:mx-auto">
+            What you need to do to get a good number of leads from Boomnify
+          </h2>
+          <p className="text-base text-gray-300 md:text-lg">
+            You can search any type of lead with any location and no barriers in it. Boomnify provides ample leads in just a few minutes.
+          </p>
+        </motion.div>
+        <div className="grid gap-8 row-gap-5 mb-8 md:row-gap-8 lg:grid-cols-4 sm:grid-cols-2">
+          {features.map((feature, index) => (
+            <motion.div 
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="duration-300 transform bg-gray-800 border-l-4 border-cyan-400 hover:-translate-y-2"
+            >
+              <div className="h-full p-5 border border-l-0 rounded-r shadow-sm">
+                <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-cyan-900">
+                  <feature.icon className="w-6 h-6 text-cyan-400" />
+                </div>
+                <h6 className="mb-2 font-semibold leading-5 text-white">{feature.title}</h6>
+                <p className="text-sm text-gray-400">
+                  {feature.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+          className="text-center"
+        >
+          <a
+            href="/howtosearch"
+            className="inline-flex items-center justify-center h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-cyan-600 hover:bg-cyan-700 focus:shadow-outline focus:outline-none"
           >
-            <defs>
-              <pattern
-                id="34f481be-159a-4846-821d-9ca19fb6bcc5"
-                x={0}
-                y={0}
-                width=".135"
-                height=".30"
-              >
-                <circle cx={1} cy={1} r=".7" />
-              </pattern>
-            </defs>
-            <rect
-              fill="url(#34f481be-159a-4846-821d-9ca19fb6bcc5)"
-              width={52}
-              height={24}
-            />
-          </svg>
-          <span className="relative"></span>
-        </span>
-        What you needs to do to get good number of leads from exel leads
-the steps to follow
-      </h2>
-      <p className="text-base text-gray-700 md:text-lg">
-      You can search any type of lead with any location and no barrers in it, Exel leads provides the ample of leads just in few minutes
-      </p>
-    </div>
-    <div className="grid gap-8 row-gap-5 mb-8 md:row-gap-8 lg:grid-cols-4 sm:grid-cols-2">
-      <div className="duration-300 transform bg-white border-l-4 border-deep-purple-accent-400 hover:-translate-y-2">
-        <div className="h-full p-5 border border-l-0 rounded-r shadow-sm">
-          <h6 className="mb-2 font-semibold leading-5">  Search For Leads</h6>
-          <p className="text-sm text-gray-900">
-        
-
-Enter Position
-
-inter the key word like- Dentists, Digital Marketing, Golf Courses based on your business target
-          </p>
-        </div>
-      </div>
-      <div className="duration-300 transform bg-white border-l-4 border-deep-purple-accent-400 hover:-translate-y-2">
-        <div className="h-full p-5 border border-l-0 rounded-r shadow-sm">
-          <h6 className="mb-2 font-semibold leading-5">See City Location and Enter</h6>
-          <p className="text-sm text-gray-900">
-          Enter the City- Delhi, Mumbai, and any other location
-
-
-          </p>
-        </div>
-      </div>
-      <div className="duration-300 transform bg-white border-l-4 border-deep-purple-accent-400 hover:-translate-y-2">
-        <div className="h-full p-5 border border-l-0 rounded-r shadow-sm">
-          <h6 className="mb-2 font-semibold leading-5">Results and Delivery</h6>
-          <p className="text-sm text-gray-900">
-          No. of leads- number of leads you need 
-
-that's it , enjoy the leads and grow, At should search for atmost 100 leads only before 
-          </p>
-        </div>
-      </div>
-      <div className="duration-300 transform bg-white border-l-4 border-deep-purple-accent-400 hover:-translate-y-2">
-        <div className="h-full p-5 border border-l-0 rounded-r shadow-sm">
-          <h6 className="mb-2 font-semibold leading-5">Enjoy Leads</h6>
-          <p className="text-sm text-gray-900">
-            Take the leads and grow your business
-          </p>
-        </div>
+            Learn more
+          </a>
+        </motion.div>
       </div>
     </div>
-    <div className="text-center">
-      <a
-        href="/"
-        className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md md:w-auto bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
-      >
-        Learn more
-      </a>
-    </div>
-  </div>
-  </div>
   )
 }
 

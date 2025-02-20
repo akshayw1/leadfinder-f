@@ -5,30 +5,52 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { showErrorMessage, showSuccessMessage } from '../../utils/toast';
 import { loginSchema } from '../../validations/inputValidation';
 import { login } from '../../redux/reducers/loginSlice';
-import Button from '../Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate,useLocation } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios';  // Import axios for the API request
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
   const { isLoading } = useSelector((state) => state.login);
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const [see, setSee] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);  // Manage modal state
+  const [email, setEmail] = useState('');
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(loginSchema) });
 
+  const handleSeePassword = () => {
+    setSee(!see);
+  };
+
   const onSubmit = async (userData) => {
+    if (!isChecked) {
+      showErrorMessage("Please accept the terms and conditions");
+      return;
+    }
     try {
       const response = await dispatch(login(userData)).unwrap();
       if (response?.status === 401) {
         showErrorMessage(response?.message);
-      }
-      showSuccessMessage(response?.message);
-      if (response?.isAdmin === true) {
-        navigate('/admin');
       } else {
-        navigate('/dashboard');
+        showSuccessMessage(response?.message);
+        if (response?.isAdmin === true) {
+          navigate('/admin');
+        } else {
+          const from = location.state?.from || '/dashboard';
+          const planId = location.state?.planId;
+      
+          // Redirect to the previous page
+          navigate(from, { state: { planId } });
+        }
       }
     } catch (error) {
       if (error.status === 403) {
@@ -37,162 +59,170 @@ const Login = () => {
     }
   };
 
+  // Handle Forgot Password Request
+  const handleForgetPassword = async () => {
+    try {
+      const response = await axios.post(
+        'https://leadfinder-api.boomnify.com/api/v1/users/forgetpasswordrequest',
+        { email }
+      );
+      if (response.status === 200) {
+        toast("You will receive a link on your email to reset your password");
+        showSuccessMessage('You will receive a link on your email to reset your password');
+        setIsModalOpen(false); // Close modal on success
+      } else {
+        showErrorMessage('Failed to send password reset email');
+      }
+    } catch (error) {
+      showErrorMessage('Error sending password reset request');
+    }
+  };
+
   return (
-    <>
-      <main className="w-full max-w-md mx-auto p-6 -mt-20">
-        <div className="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700">
-          <div className="p-4 sm:p-7">
-            <div className="text-center">
-              <h1 className="block text-2xl font-bold text-gray-800 dark:text-white">
-                Log In
-              </h1>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-                Do not have an account?
-                <Link
-                  className="text-deep-purple-accent-700 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600 block"
-                  to="/auth/signup"
-                >
-                  Sign Up here
-                </Link>
-              </p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#0F172A] to-[#1E293B] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 bg-[#1E293B]/50 backdrop-blur-sm p-10 rounded-xl shadow-2xl transform transition-all duration-500 ease-in-out hover:shadow-cyan-500/20">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+            Log in to your account
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-400">
+            Or{' '}
+            <Link
+              to="/auth/signup"
+              className="font-medium text-[#7DD3FC] hover:text-cyan-400 transition-colors duration-300"
+            >
+              sign up for a new account
+            </Link>
+          </p>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div className="rounded-md shadow-sm -space-y-px">
+            <div>
+              <label htmlFor="email-address" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email-address"
+                type="email"
+                autoComplete="email"
+                required
+                className="appearance-none rounded-t-md relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-400 bg-gray-900/50 text-white focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 focus:z-10 sm:text-sm transition-all duration-300"
+                placeholder="Email address"
+                {...register('email')}
+              />
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-400">{errors.email.message}</p>
+              )}
             </div>
-            <div className="mt-5">
-              {/* Form */}
-              <form
-                onSubmit={(event) => {
-                  handleSubmit(onSubmit)(event);
-                }}
+            <div className="relative">
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                type={see ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                className="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-400 bg-gray-900/50 text-white focus:outline-none focus:ring-cyan-500 focus:border-cyan-500 focus:z-10 sm:text-sm transition-all duration-300"
+                placeholder="Password"
+                {...register('password')}
+              />
+              <button
+                type="button"
+                onClick={handleSeePassword}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-cyan-500"
               >
-                <div className="grid gap-y-4">
-                  {/* Form Group */}
+                {see ? <FaEye /> : <FaEyeSlash />}
+              </button>
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-400">{errors.password.message}</p>
+              )}
+            </div>
+          </div>
 
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm mb-2 dark:text-white"
-                    >
-                      Email address
-                    </label>
-                    <div className="relative">
-                      <input
-                        id="email"
-                        type="email"
-                        placeholder="email"
-                        required
-                        {...register('email')}
-                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                      />
-                    </div>
-                    <p
-                      className="hidden text-xs text-red-600 mt-2"
-                      id="email-error"
-                    >
-                      {errors.email && <p>{errors.email.message}</p>}
-                    </p>
-                  </div>
-                  {/* End Form Group */}
-                  {/* Form Group */}
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block text-sm mb-2 dark:text-white"
-                    >
-                      Password
-                    </label>
-                    <div className="relative">
-                      <input
-                        id="password"
-                        type="password"
-                        placeholder="******************"
-                        required
-                        {...register('password')}
-                        className="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
-                      />
-                    </div>
-                    <p
-                      className="hidden text-xs text-red-600 mt-2"
-                      id="password-error"
-                    >
-                      {errors.password && <p>{errors.password.message}</p>}
-                    </p>
-                  </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                checked={isChecked}
+                onChange={(e) => setIsChecked(e.target.checked)}
+                className="h-4 w-4 text-cyan-500 focus:ring-cyan-500 border-gray-700 rounded bg-gray-900/50 transition-all duration-300"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-300">
+                I accept the terms and conditions
+              </label>
+            </div>
+          </div>
 
-                  {/* End Form Group */}
-                  {/* Checkbox */}
-                  <div className="mb-6">
-                    <label className="mb-2 flex text-sm">
-                      <input
-                        type="checkbox"
-                        name="accept"
-                        className="mr-2"
-                        required
-                      />
-                      <div className="text-gray-800">
-                        <p className="">
-                          I accept the
-                          <a
-                            href="/terms"
-                            className="cursor-pointer text-blue-500 m-1 "
-                          >
-                            Terms of use
-                          </a>
-                          and
-                          <a
-                            href="/privacy"
-                            className="cursor-pointer text-blue-500 m-1"
-                          >
-                            privacy policy
-                          </a>
-                        </p>
-                      </div>
-                    </label>
-                  </div>
-                  {/* End Checkbox */}
-                  <div className="flex items-center">
-                    <div className="flex-1"></div>
-                    {isLoading ? (
-                      <>
-                        <button
-                          type="submit"
-                          disabled={true}
-                          className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-deep-purple-accent-700 text-white hover:bg-deep-purple-accent-500 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                        >
-                          <svg
-                            role="status"
-                            className="w-full inline mr-3 h-4 text-white animate-spin"
-                            viewBox="0 0 100 101"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                              fill="#E5E7EB"
-                            />
-                            <path
-                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                              fill="currentColor"
-                            />
-                          </svg>
-                        </button>
-                      </>
-                    ) : (
-                      <button
-                        type="submit"
-                        className="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-deep-purple-accent-700 text-white hover:bg-deep-purple-accent-500 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                      >
-                        Login
-                      </button>
-                    )}
-                  </div>
-                  <div></div>
-                </div>
-              </form>
-              {/* End Form */}
+          <div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-cyan-500 to-[#7DD3FC] hover:from-cyan-600 hover:to-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              ) : (
+                <span>Sign in</span>
+              )}
+            </button>
+          </div>
+          <div className="flex justify-center items-center">
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(true)}  // Open the modal when clicked
+              className="text-[13px] text-center text-[#7DD3FC] hover:text-blue-400 transition-colors duration-300"
+            >
+              Forgot Password
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* Forgot Password Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-xl w-80">
+            <h2 className="text-xl font-semibold mb-4">Forgot Password</h2>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full p-2 border border-gray-300 rounded-md mb-4"
+            />
+            <div className="flex justify-between space-x-2">
+              <button
+                onClick={handleForgetPassword}
+                className="w-1/2 bg-blue-500 text-white py-2 rounded-md"
+              >
+                Submit
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="w-1/2 bg-gray-500 text-white py-2 rounded-md"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
-      </main>
-    </>
+      )}
+    </div>
   );
 };
 

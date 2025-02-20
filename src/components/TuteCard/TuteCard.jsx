@@ -1,176 +1,241 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchStatistics } from '../../redux/reducers/statisticsSlice';
-import getUserInfo from '../../utils/getUserInfo';
-import { formatTitle, remainingDays } from '../../utils/format';
-import { Button } from 'flowbite-react';
-import { Link } from 'react-router-dom';
+"use client"
+
+import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { fetchStatistics } from "../../redux/reducers/statisticsSlice"
+import getUserInfo from "../../utils/getUserInfo"
+import { formatTitle, remainingDays } from "../../utils/format"
+import { StarIcon, UserPlusIcon, FlameIcon } from "lucide-react"
+import axios from "axios"
 
 const TuteCard = () => {
-  const statistics = useSelector((state) => state.statistics);
-  const dispatch = useDispatch();
-  const info = getUserInfo();
+  const statistics = useSelector((state) => state.statistics)
+  const dispatch = useDispatch()
+  const info = getUserInfo()
+  const [isOpen, setIsOpen] = useState(false)
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
+  const [toastMessage, setToastMessage] = useState("")
+  const [isToastVisible, setIsToastVisible] = useState(false)
 
   useEffect(() => {
-    dispatch(fetchStatistics());
-  }, [dispatch]);
+    dispatch(fetchStatistics())
+  }, [dispatch])
 
-  if (statistics.length < 0) return null;
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      // alert("Dsada")
+      const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/report`, { subject, message })
+      if (response.status === 200) {
+        setToastMessage("Bug report submitted. Thank you for your feedback!")
+        setIsToastVisible(true)
+        setIsOpen(false)
+        setSubject("")
+        setMessage("")
+        setTimeout(() => setIsToastVisible(false), 3000)
+      } else {
+        throw new Error('Failed to submit bug report')
+      }
+    } catch (error) {
+      setToastMessage("Failed to submit bug report. Please try again.")
+      setIsToastVisible(true)
+      setTimeout(() => setIsToastVisible(false), 3000)
+    }
+  }
+
+  if (statistics.length < 0) return null
 
   return (
-    <>
-      <div className="max-w-5xl w-full mx-auto z-10 mr-5">
-        <div className="flex flex-col">
-          <div className="bg-white border border-white shadow-lg  rounded-3xl p-4 m-4">
-            <div className="flex-none sm:flex">
-              <div className="flex-auto sm:ml-5 justify-evenly">
-                <div className="flex items-center justify-between sm:mt-2">
-                  <div className="flex items-center">
-                    <div className="flex flex-col">
-                      <div className="w-full flex-none text-2xl text-gray-800 font-bold leading-none">
-                        👋 <b className="text-2xl">Hello</b> {info?.data?.name}
-                      </div>
-                      <div className="flex-auto text-gray-500 my-1">
-                        <span className="mr-3 ">LeadFinder</span>
-                        <span className="mr-3 border-r border-gray-200  max-h-0" />
-                        <span>India</span>
-                      </div>
-                    </div>
-                  </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="max-w-5xl w-full mx-auto z-10 px-4"
+    >
+      <div className="relative">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl opacity-10 blur-xl" />
+        <motion.div
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-700 shadow-2xl rounded-3xl p-8"
+        >
+          <div className="flex flex-col md:flex-row gap-8">
+            <div className="flex-1">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+                className="flex items-center gap-4 mb-6"
+              >
+                <div className="h-16 w-16 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center">
+                  <span className="text-2xl">👋</span>
                 </div>
-                <div className="flex flex-row items-center">
-                  <div className="flex">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="h-5 w-5 text-yellow-500"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="h-5 w-5 text-yellow-500"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="h-5 w-5 text-yellow-500"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      className="h-5 w-5 text-yellow-500"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="h-5 w-5 text-yellow-500"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
-                      ></path>
-                    </svg>
-                  </div>
-                  <div className="flex-1 inline-flex  hidden items-center">
-                    <img
-                      className="w-5 h-5"
-                      src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDY0IDY0IiBoZWlnaHQ9IjY0cHgiIGlkPSJMYXllcl8xIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA2NCA2NCIgd2lkdGg9IjY0cHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxwYXRoIGQ9Ik0zMiw3LjE3NEMxOC4zMTEsNy4xNzQsNy4xNzQsMTguMzExLDcuMTc0LDMyYzAsMTMuNjg5LDExLjEzNywyNC44MjYsMjQuODI2LDI0LjgyNmMxMy42ODksMCwyNC44MjYtMTEuMTM3LDI0LjgyNi0yNC44MjYgIEM1Ni44MjYsMTguMzExLDQ1LjY4OSw3LjE3NCwzMiw3LjE3NHogTTM4LjE3NCwzMi44NzRoLTQuMDM5YzAsNi40NTMsMCwxNC4zOTgsMCwxNC4zOThoLTUuOTg1YzAsMCwwLTcuODY4LDAtMTQuMzk4aC0yLjg0NXYtNS4wODggIGgyLjg0NXYtMy4yOTFjMC0yLjM1NywxLjEyLTYuMDQsNi4wNC02LjA0bDQuNDMzLDAuMDE3djQuOTM5YzAsMC0yLjY5NSwwLTMuMjE5LDBjLTAuNTI0LDAtMS4yNjgsMC4yNjItMS4yNjgsMS4zODZ2Mi45OWg0LjU2ICBMMzguMTc0LDMyLjg3NHoiLz48L3N2Zz4="
-                    />
-                    <img
-                      className="w-5 h-5"
-                      src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDU2LjY5MyA1Ni42OTMiIGhlaWdodD0iNTYuNjkzcHgiIGlkPSJMYXllcl8xIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA1Ni42OTMgNTYuNjkzIiB3aWR0aD0iNTYuNjkzcHgiIHhtbDpzcGFjZT0icHJlc2VydmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPjxwYXRoIGQ9Ik0yOC4zNDgsNS4xNTdjLTEzLjYsMC0yNC42MjUsMTEuMDI3LTI0LjYyNSwyNC42MjVjMCwxMy42LDExLjAyNSwyNC42MjMsMjQuNjI1LDI0LjYyM2MxMy42LDAsMjQuNjIzLTExLjAyMywyNC42MjMtMjQuNjIzICBDNTIuOTcxLDE2LjE4NCw0MS45NDcsNS4xNTcsMjguMzQ4LDUuMTU3eiBNNDAuNzUyLDI0LjgxN2MwLjAxMywwLjI2NiwwLjAxOCwwLjUzMywwLjAxOCwwLjgwM2MwLDguMjAxLTYuMjQyLDE3LjY1Ni0xNy42NTYsMTcuNjU2ICBjLTMuNTA0LDAtNi43NjctMS4wMjctOS41MTMtMi43ODdjMC40ODYsMC4wNTcsMC45NzksMC4wODYsMS40OCwwLjA4NmMyLjkwOCwwLDUuNTg0LTAuOTkyLDcuNzA3LTIuNjU2ICBjLTIuNzE1LTAuMDUxLTUuMDA2LTEuODQ2LTUuNzk2LTQuMzExYzAuMzc4LDAuMDc0LDAuNzY3LDAuMTExLDEuMTY3LDAuMTExYzAuNTY2LDAsMS4xMTQtMC4wNzQsMS42MzUtMC4yMTcgIGMtMi44NC0wLjU3LTQuOTc5LTMuMDgtNC45NzktNi4wODRjMC0wLjAyNywwLTAuMDUzLDAuMDAxLTAuMDhjMC44MzYsMC40NjUsMS43OTMsMC43NDQsMi44MTEsMC43NzcgIGMtMS42NjYtMS4xMTUtMi43NjEtMy4wMTItMi43NjEtNS4xNjZjMC0xLjEzNywwLjMwNi0yLjIwNCwwLjg0LTMuMTJjMy4wNjEsMy43NTQsNy42MzQsNi4yMjUsMTIuNzkyLDYuNDgzICBjLTAuMTA2LTAuNDUzLTAuMTYxLTAuOTI4LTAuMTYxLTEuNDE0YzAtMy40MjYsMi43NzgtNi4yMDUsNi4yMDYtNi4yMDVjMS43ODUsMCwzLjM5NywwLjc1NCw0LjUyOSwxLjk1OSAgYzEuNDE0LTAuMjc3LDIuNzQyLTAuNzk1LDMuOTQxLTEuNTA2Yy0wLjQ2NSwxLjQ1LTEuNDQ4LDIuNjY2LTIuNzMsMy40MzNjMS4yNTctMC4xNSwyLjQ1My0wLjQ4NCwzLjU2NS0wLjk3NyAgQzQzLjAxOCwyMi44NDksNDEuOTY1LDIzLjk0Miw0MC43NTIsMjQuODE3eiIvPjwvc3ZnPg=="
-                    />
-                    <img
-                      className="w-5 h-5"
-                      src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iNjdweCIgaWQ9IkxheWVyXzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDY3IDY3OyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgNjcgNjciIHdpZHRoPSI2N3B4IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48cGF0aCBkPSJNNTAuODM3LDQ4LjEzN1YzNi40MjVjMC02LjI3NS0zLjM1LTkuMTk1LTcuODE2LTkuMTk1ICBjLTMuNjA0LDAtNS4yMTksMS45ODMtNi4xMTksMy4zNzRWMjcuNzFoLTYuNzljMC4wOSwxLjkxNywwLDIwLjQyNywwLDIwLjQyN2g2Ljc5VjM2LjcyOWMwLTAuNjA5LDAuMDQ0LTEuMjE5LDAuMjI0LTEuNjU1ICBjMC40OS0xLjIyLDEuNjA3LTIuNDgzLDMuNDgyLTIuNDgzYzIuNDU4LDAsMy40NCwxLjg3MywzLjQ0LDQuNjE4djEwLjkyOUg1MC44Mzd6IE0yMi45NTksMjQuOTIyYzIuMzY3LDAsMy44NDItMS41NywzLjg0Mi0zLjUzMSAgYy0wLjA0NC0yLjAwMy0xLjQ3NS0zLjUyOC0zLjc5Ny0zLjUyOHMtMy44NDEsMS41MjQtMy44NDEsMy41MjhjMCwxLjk2MSwxLjQ3NCwzLjUzMSwzLjc1MywzLjUzMUgyMi45NTl6IE0zNCw2NCAgQzE3LjQzMiw2NCw0LDUwLjU2OCw0LDM0QzQsMTcuNDMxLDE3LjQzMiw0LDM0LDRzMzAsMTMuNDMxLDMwLDMwQzY0LDUwLjU2OCw1MC41NjgsNjQsMzQsNjR6IE0yNi4zNTQsNDguMTM3VjI3LjcxaC02Ljc4OXYyMC40MjcgIEgyNi4zNTR6IiBzdHlsZT0iZmlsbC1ydWxlOmV2ZW5vZGQ7Y2xpcC1ydWxlOmV2ZW5vZGQ7ZmlsbDojMDEwMTAxOyIvPjwvc3ZnPg=="
-                    />
-                  </div>
+                <div>
+                  <h2 className="text-3xl font-bold text-white">Hello, {info?.data?.name}</h2>
+                  <p className="text-gray-400">Welcome to LeadFinder</p>
+                  <p className="text-gray-400">{info?.data?.email}</p>
                 </div>
-                <div className="flex pt-2  text-sm text-gray-500">
-                  <div className="flex-1 inline-flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
-                    </svg>
-                    <p className="text-xl">
-                      {' '}
-                      {statistics.data
-                        ? statistics.data.searchQueriesPerDay
-                        : 0}{' '}
-                      Remaining Searches
-                    </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8"
+              >
+                <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                  <div className="flex items-center gap-3 mb-2">
+                    <UserPlusIcon className="h-5 w-5 text-blue-400" />
+                    <span className="text-lg text-gray-200">Remaining Searches</span>
                   </div>
-                  <div className="flex-1 inline-flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <p className="text-xl">
-                      {' '}
-                      {statistics.data ? statistics.data.leadsPerDay : 0}{' '}
-                      Remaining Leads
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-5 flex justify-start items-center gap-10">
-                  <p>
-                    Plan:{' '}
-                    <span className="ml-1">
-                      {statistics.data
-                        ? formatTitle(statistics?.data?.plan?.name)
-                        : 'No Plan'}
-                    </span>
-                  </p>
-                  <p>
-                    Remaining Days:
-                    <span className="ml-2">
-                      {statistics.data
-                        ? remainingDays(statistics.data.endDate)
-                        : 'Expired'}
-                    </span>
+                  <p className="text-3xl font-bold text-white">
+                    {statistics.data ? statistics.data.searchQueriesPerDay : 0}
                   </p>
                 </div>
-              </div>
+
+                <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700">
+                  <div className="flex items-center gap-3 mb-2">
+                    <FlameIcon className="h-5 w-5 text-purple-400" />
+                    <span className="text-lg text-gray-200">Remaining Leads</span>
+                  </div>
+                  <p className="text-3xl font-bold text-white">
+                    {statistics.data ? statistics.data.leadsPerDay : 0}
+                  </p>
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="space-y-4"
+              >
+                <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+                  <span className="text-gray-200">Current Plan</span>
+                  <span className="text-white font-semibold">
+                    {statistics.data ? formatTitle(statistics?.data?.plan?.name) : "No Plan"}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-xl border border-gray-700">
+                  <span className="text-gray-200">Days Remaining</span>
+                  <span className="text-white font-semibold">
+                    {statistics.data ? remainingDays(statistics.data.endDate) : "Expired"}
+                  </span>
+                </div>
+              </motion.div>
+            </div>
+
+            <div className="flex-none md:w-64">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 }}
+                className="bg-gradient-to-b from-blue-500 to-purple-600 p-6 rounded-2xl text-white"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  {[1, 2, 3, 4, 5].map((_, index) => (
+                    <StarIcon key={index} className="h-5 w-5 text-yellow-300 fill-yellow-300" />
+                  ))}
+                </div>
+                <h3 className="text-lg font-semibold mb-2">Premium Features</h3>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-blue-300" />
+                    Advanced Search
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-blue-300" />
+                    Export Data
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <div className="h-2 w-2 rounded-full bg-blue-300" />
+                    Priority Support
+                  </li>
+                </ul>
+              </motion.div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
-      
-      <div className='flex justify-end m-2'>
-      <a href="mailto:exelleads@gmail.com">
-  <Button className="bg-deep-purple-accent-700 hover:bg-none">Report a Bug</Button>
-</a>
-      </div>
-    </>
-  );
-};
 
-export default TuteCard;
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="flex justify-end mt-4"
+      >
+        <button
+          onClick={() => setIsOpen(true)}
+          className="px-4 py-2 bg-purple-600 hover:bg-purple-700 transition-colors rounded-lg text-white font-medium"
+        >
+          Report a Bug
+        </button>
+      </motion.div>
+
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full">
+            <h2 className="text-2xl font-bold mb-4">Report a Bug</h2>
+            <p className="text-gray-600 mb-4">
+              Describe the issue you're experiencing. We'll look into it as soon as possible.
+            </p>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+                  Subject
+                </label>
+                <input
+                  type="text"
+                  id="subject"
+                  value={subject}
+                  onChange={(e) => setSubject(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  rows={4}
+                  required
+                ></textarea>
+              </div>
+              <div className="flex justify-end gap-4">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-purple-600 hover:bg-purple-700 transition-colors rounded-lg text-white font-medium"
+                >
+                  Submit Report
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {isToastVisible && (
+        <div className="fixed bottom-4 right-4 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg">
+          {toastMessage}
+        </div>
+      )}
+    </motion.div>
+  )
+}
+
+export default TuteCard

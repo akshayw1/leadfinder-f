@@ -18,7 +18,7 @@ const HomeP = () => {
     <div className="mb-12 lg:max-w-lg lg:pr-5 lg:mb-0">
       <div className="max-w-xl mb-6">
         <h2 className="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
-        Empowering Businesses 
+        Empowering Businesses
 
           <br className="hidden md:block" />
           <span className="inline-block text-deep-purple-accent-400">
@@ -26,7 +26,7 @@ const HomeP = () => {
           </span>
         </h2>
         <p className="text-base text-gray-700 md:text-lg">
-        At Exel Leads, we are passionate about empowering businesses to thrive by providing unparalleled lead generation
+        At Boomnify, we are passionate about empowering businesses to thrive by providing unparalleled lead generation
 solutions. With a steadfast commitment to excellence and innovation, we specialize in finding unlimited business
 leads that drive growth and success.
         </p>
@@ -44,7 +44,7 @@ leads that drive growth and success.
           <div className="text-sm font-semibold">
             Get Quality leads 
           </div>
-          <div className="text-xs text-gray-700">Exelleads</div>
+          <div className="text-xs text-gray-700">Boomnify</div>
         </div>
       </div>
     </div>
@@ -126,7 +126,7 @@ leads that drive growth and success.
   <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
     <div>
       <p class="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400">
-       Exelleads
+       Boomnify
       </p>
     </div>
     <h2 class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-gray-900 sm:text-4xl md:mx-auto">
@@ -200,7 +200,7 @@ on quantity but on the quality and relevance of the leads we deliver.
             <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
           </svg>
         </div>
-        <h6 class="mb-2 font-semibold leading-5">Get Started with Exel Leads:</h6>
+        <h6 class="mb-2 font-semibold leading-5">Get Started with Boomnify:</h6>
         <p class="mb-3 text-sm text-gray-900">
         Are you ready to take your business to new heights? Partner with us and unlock a
 world of unlimited business leads. Let's embark on this journey together towards sustainable growth and prosperity        </p>

@@ -1,45 +1,49 @@
 import React from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom'
+import { FaUsers, FaMoneyBillWave, FaTasks, FaChevronRight } from 'react-icons/fa'
 
 const AdminSideBar = () => {
+  const location = useLocation()
+
+  const isActive = (path) => location.pathname === path
+
+  const menuItems = [
+    { path: '/admin/all-users', icon: FaUsers, label: 'All Users' },
+    { path: '/admin/payments', icon: FaMoneyBillWave, label: 'All Payments' },
+    { path: '/admin/seeplans', icon: FaTasks, label: 'Manage Plans' },
+  ]
+
   return (
-<>
-    
-  
-  <link href="/dist/tailwind.css" rel="stylesheet" />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css"
-  />
-  
-  <div className="sidebar  top-20  lg:left-0 p-2 w-[300px] h-full text-center bg-gray-900">
-   
-   <div className='text-2xl font-semibold p-4 flex text-center text-white'>Admin Panel</div>
-  <div className="my-4 bg-gray-600 h-[1px]" />
-  <Link to = "/admin/all-users">  <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-      <i className="bi bi-house-door-fill" />
-    <span className="text-[15px] ml-4 text-gray-200 font-bold">All Users </span>
-    </div></Link>
-    <Link to = "/admin/payments">  <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-      <i className="bi bi-bookmark-fill" />
-      <span className="text-[15px] ml-4 text-gray-200 font-bold">All Payments</span>
-    </div></Link>
-    <Link to = "/admin/addplans">  <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-      <i className="bi bi-bookmark-fill" />
-      <span className="text-[15px] ml-4 text-gray-200 font-bold">Add Plan </span>
-    </div></Link>
-    <Link to = "/admin/seeplans">  <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
-      <i className="bi bi-bookmark-fill" />
-      <span className="text-[15px] ml-4 text-gray-200 font-bold">See Plan </span>
-    </div></Link>
-    <div className="my-4 bg-gray-600 h-[1px]" />
-   
-  
-  </div>
-
-
-  </>
+    <div className="bg-white text-blue-900 w-64 min-h-screen flex flex-col shadow-lg">
+      <div className="p-6 bg-blue-900 text-white">
+        <h2 className="text-2xl font-bold">Admin Panel</h2>
+      </div>
+      <nav className="flex-1 pt-6">
+        <ul className="space-y-1">
+          {menuItems.map((item) => (
+            <li key={item.path}>
+              <Link
+                to={item.path}
+                className={`flex items-center px-6 py-3 text-sm font-medium rounded-r-full transition-colors duration-200 ${
+                  isActive(item.path)
+                    ? 'bg-blue-100 text-blue-900'
+                    : 'text-gray-600 hover:bg-blue-50 hover:text-blue-900'
+                }`}
+              >
+                <item.icon className={`mr-3 text-lg ${isActive(item.path) ? 'text-blue-900' : 'text-gray-400'}`} />
+                <span>{item.label}</span>
+                {isActive(item.path) && <FaChevronRight className="ml-auto" />}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <div className="p-4 border-t border-gray-200">
+        <p className="text-sm text-gray-600">© 2023 Admin Dashboard</p>
+      </div>
+    </div>
   )
 }
 
-export default AdminSideBar;
+export default AdminSideBar
+
